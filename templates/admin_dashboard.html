@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1"><i class="fas fa-shield-alt me-2" style="color:var(--warning);"></i>Admin Dashboard</h3>
+            <p class="text-muted mb-0">System overview and management</p>
+        </div>
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-danger-custom">
+            <i class="fas fa-sign-out-alt me-1"></i>Logout
+        </a>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="stat-card text-center p-3 shadow-sm border-0">
+                <div class="stat-icon mb-2" style="background:var(--primary-light); width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto;">
+                    <i class="fas fa-users" style="color:var(--primary);"></i>
+                </div>
+                <div class="stat-number fw-bold h4" style="color:var(--primary);">{{ total_users }}</div>
+                <div class="text-muted small">Total Users</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card text-center p-3 shadow-sm border-0">
+                <div class="stat-icon mb-2" style="background:#EDE9FE; width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto;">
+                    <i class="fas fa-chart-bar" style="color:#7C3AED;"></i>
+                </div>
+                <div class="stat-number fw-bold h4" style="color:#7C3AED;">{{ total_preds }}</div>
+                <div class="text-muted small">Total Predictions</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card text-center p-3 shadow-sm border-0">
+                <div class="stat-icon mb-2" style="background:var(--accent-light); width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto;">
+                    <i class="fas fa-check-circle" style="color:var(--accent);"></i>
+                </div>
+                <div class="stat-number fw-bold h4" style="color:var(--accent);">{{ approved }}</div>
+                <div class="text-muted small">Approved</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-card text-center p-3 shadow-sm border-0">
+                <div class="stat-icon mb-2" style="background:var(--danger-light); width:50px; height:50px; line-height:50px; border-radius:50%; margin:0 auto;">
+                    <i class="fas fa-times-circle" style="color:var(--danger);"></i>
+                </div>
+                <div class="stat-number fw-bold h4" style="color:var(--danger);">{{ rejected }}</div>
+                <div class="text-muted small">Rejected</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4 border-0 shadow-sm">
+        <h5 class="fw-bold mb-3"><i class="fas fa-chart-pie me-2" style="color:var(--primary);"></i>Prediction Overview</h5>
+        {% if total_preds > 0 %}
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div style="background:var(--surface2);border-radius:12px;padding:1.5rem;">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-600">Approval Rate</span>
+                        <span class="fw-bold" style="color:var(--accent);">{{ "%.1f"|format((approved / total_preds) * 100) }}%</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.05);border-radius:8px;height:16px;overflow:hidden;">
+                        <div style="background:linear-gradient(90deg,var(--accent),#059669);height:100%;width:{ { [ ((approved / total_preds) * 100)|round |int,100] | min }}%;border-radius:8px;transition:width 1s;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-3 mt-md-0">
+                <div class="d-flex gap-4 justify-content-center">
+                    <div class="text-center">
+                        <div class="h2 fw-bold mb-0" style="color:var(--accent);">{{ approved }}</div>
+                        <span class="badge bg-success-light text-success px-3">Approved</span>
+                    </div>
+                    <div style="width:1px; background:var(--border); height:50px;"></div>
+                    <div class="text-center">
+                        <div class="h2 fw-bold mb-0" style="color:var(--danger);">{{ rejected }}</div>
+                        <span class="badge bg-danger-light text-danger px-3">Rejected</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+            <p class="text-muted mb-0">No prediction data available to display chart.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <a href="{{ url_for('admin_users') }}" class="btn btn-primary-custom w-100 py-3 fw-bold">
+                <i class="fas fa-users me-2"></i>Manage Users
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{{ url_for('admin_predictions') }}" class="btn btn-warning-custom w-100 py-3 fw-bold">
+                <i class="fas fa-list me-2"></i>View All Predictions
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}          Fix this code

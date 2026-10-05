@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<style>
+.welcome-header {
+    background: linear-gradient(135deg, var(--primary) 0%, #3B82F6 100%);
+    border-radius: 20px; padding: 2rem 2.5rem; color: white; margin-bottom: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+}
+.welcome-header h3 { margin: 0; font-weight: 800; }
+.prediction-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem; box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+@media(max-width:768px) { .form-grid { grid-template-columns: 1fr; } }
+.input-group-custom { position: relative; }
+.input-group-custom label { font-weight: 600; font-size: 0.88rem; color:var(--text-muted); margin-bottom: 0.4rem; display:block; }
+.predict-btn {
+    width: 100%; padding: 1rem;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    border: none; border-radius: 12px; color: white;
+    font-size: 1.1rem; font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin-top: 1.5rem; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(245,158,11,0.35);
+    transition: all 0.2s;
+}
+.predict-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,158,11,0.45); }
+.fill-sample-btn {
+    background: var(--primary-light); color: var(--primary);
+    border: none; border-radius: 8px; padding: 0.4rem 1rem;
+    font-weight: 600; font-size: 0.85rem; cursor: pointer;
+    transition: background 0.2s;
+}
+.fill-sample-btn:hover { background: var(--primary); color: white; }
+.recent-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem; box-shadow: var(--shadow);
+}
+.empty-state {
+    text-align: center; padding: 3rem; color: var(--text-muted);
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Welcome Header -->
+<div class="welcome-header fade-in">
+    <div>
+        <p class="mb-1" style="color:rgba(255,255,255,0.75);font-size:0.9rem;">Welcome back 👋</p>
+        <h3>{{ session.user_name }}</h3>
+        <p class="mb-0" style="color:rgba(255,255,255,0.75);">Ready to check your loan eligibility?</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('change_password') }}" class="btn" style="background:rgba(255,255,255,0.2);color:white;border-radius:10px;font-weight:600;">
+            <i class="fas fa-key me-1"></i>Change Password
+        </a>
+        <a href="{{ url_for('logout') }}" class="btn" style="background:var(--danger);color:white;border-radius:10px;font-weight:600;">
+            <i class="fas fa-sign-out-alt me-1"></i>Logout
+        </a>
+    </div>
+</div>
+
+<!-- Prediction Form -->
+<div class="prediction-card fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0">
+            <i class="fas fa-chart-line"></i> Loan Prediction
+        </div>
+        <button class="fill-sample-btn" onclick="fillSample()">
+            <i class="fas fa-magic me-1"></i>Fill Sample
+        </button>
+    </div>
+    <p class="text-muted mb-3" style="font-size:0.9rem;">Enter your financial details below to predict loan approval status.</p>
+
+    <form method="POST" action="{{ url_for('predict') }}">
+        <div class="form-grid">
+            <div>
+                <label class="form-label">Gender</label>
+                <select name="gender" class="form-select" id="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Married</label>
+                <select name="married" class="form-select" id="married">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Dependents</label>
+                <input type="number" name="dependents" id="dependents" class="form-control" min="0" max="10" placeholder="e.g. 2" required>
+            </div>
+            <div>
+                <label class="form-label">Education</label>
+                <select name="education" class="form-select" id="education">
+                    <option value="Graduate">Graduate</option>
+                    <option value="Not Graduate">Not Graduate</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Self Employed</label>
+                <select name="self_employed" class="form-select" id="self_employed">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Property Area</label>
+                <select name="property_area" class="form-select" id="property_area">
+                    <option value="Urban">Urban</option>
+                    <option value="Rural">Rural</option>
+                    <option value="Semiurban">Semiurban</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Applicant Income (₹)</label>
+                <input type="number" name="applicant_income" id="applicant_income" class="form-control" min="0" placeholder="e.g. 50000" required>
+            </div>
+            <div>
+                <label class="form-label">Co-applicant Income (₹)</label>
+                <input type="number" name="coapplicant_income" id="coapplicant_income" class="form-control" min="0" placeholder="e.g. 15000">
+            </div>
+            <div>
+                <label class="form-label">Loan Amount (₹)</label>
+                <input type="number" name="loan_amount" id="loan_amount" class="form-control" min="0" placeholder="e.g. 150000" required>
+            </div>
+            <div>
+                <label class="form-label">Loan Term (Months)</label>
+                <select name="loan_term" class="form-select" id="loan_term">
+                    <option value="360">360 (30 years)</option>
+                    <option value="180">180 (15 years)</option>
+                    <option value="120">120 (10 years)</option>
+                    <option value="84">84 (7 years)</option>
+                    <option value="60">60 (5 years)</option>
+                    <option value="36">36 (3 years)</option>
+                    <option value="12">12 (1 year)</option>
+                </select>
+            </div>
+            <div>
+                <label class="form-label">Credit History</label>
+                <select name="credit_history" class="form-select" id="credit_history">
+                    <option value="1">Good (1)</option>
+                    <option value="0">Bad (0)</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="predict-btn">
+            <i class="fas fa-magic me-2"></i>Predict Loan Status
+        </button>
+    </form>
+</div>
+
+<!-- Recent Predictions -->
+<div class="recent-card fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="section-title mb-0">
+            <i class="fas fa-history"></i> Recent Predictions
+        </div>
+        <a href="{{ url_for('history') }}" class="btn btn-outline-custom btn-sm">
+            <i class="fas fa-list me-1"></i>View All
+        </a>
+    </div>
+
+    {% if recent %}
+    <div class="table-responsive">
+        <table class="table table-custom mb-0">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Income (₹)</th>
+                    <th>Loan Amount (₹)</th>
+                    <th>Credit History</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in recent %}
+                <tr>
+                    <td style="color:var(--text-muted);font-size:0.88rem;">{{ p['created_at'][:16] }}</td>
+                    <td class="fw-600">{{ "{:,.0f}".format(p['applicant_income']) }}</td>
+                    <td class="fw-600">{{ "{:,.0f}".format(p['loan_amount']) }}</td>
+                    <td>{{ 'Good ✅' if p['credit_history'] == 1 else 'Bad ❌' }}</td>
+                    <td>
+                        {% if p['result'] == 'Approved' %}
+                            <span class="badge-approved"><i class="fas fa-check-circle me-1"></i>Approved</span>
+                        {% else %}
+                            <span class="badge-rejected"><i class="fas fa-times-circle me-1"></i>Rejected</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="icon">📋</div>
+        <h6 class="fw-bold">No predictions yet</h6>
+        <p class="mb-0">Submit the form above to get your first loan prediction!</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function fillSample() {
+    document.getElementById('gender').value = 'Male';
+    document.getElementById('married').value = 'Yes';
+    document.getElementById('dependents').value = '1';
+    document.getElementById('education').value = 'Graduate';
+    document.getElementById('self_employed').value = 'No';
+    document.getElementById('property_area').value = 'Urban';
+    document.getElementById('applicant_income').value = '5000';
+    document.getElementById('coapplicant_income').value = '1500';
+    document.getElementById('loan_amount').value = '128';
+    document.getElementById('loan_term').value = '360';
+    document.getElementById('credit_history').value = '1';
+}
+</script>
+{% endblock %}

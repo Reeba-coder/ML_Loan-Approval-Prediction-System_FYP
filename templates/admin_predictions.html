@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-1"><i class="fas fa-list me-2" style="color:var(--warning);"></i>All Predictions</h3>
+            <p class="text-muted mb-0">{{ predictions|length }} total prediction(s) across all users</p>
+        </div>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-custom">
+            <i class="fas fa-arrow-left me-1"></i>Back
+        </a>
+    </div>
+
+    <div class="card p-3">
+        {% if predictions %}
+        <div class="table-responsive">
+            <table class="table table-custom mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Income (₹)</th>
+                        <th>Loan (₹)</th>
+                        <th>Credit</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in predictions %}
+                    <tr>
+                        <td style="color:var(--text-muted);">{{ loop.index }}</td>
+                        <td>
+                            <div class="fw-600">{{ p['name'] }}</div>
+                            <div style="font-size:0.8rem;color:var(--text-muted);">{{ p['email'] }}</div>
+                        </td>
+                        <td style="font-size:0.85rem;color:var(--text-muted);">{{ p['created_at'][:16] }}</td>
+                        <td class="fw-600">{{ "{:,.0f}".format(p['applicant_income']) }}</td>
+                        <td class="fw-600">{{ "{:,.0f}".format(p['loan_amount']) }}</td>
+                        <td>{{ 'Good ✅' if p['credit_history']==1 else 'Bad ❌' }}</td>
+                        <td>
+                            {% if p['result'] == 'Approved' %}
+                                <span class="badge-approved"><i class="fas fa-check-circle me-1"></i>Approved</span>
+                            {% else %}
+                                <span class="badge-rejected"><i class="fas fa-times-circle me-1"></i>Rejected</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-3 d-flex gap-3" style="padding:0 1rem;">
+            <span class="badge-approved">✅ {{ predictions|selectattr('result','equalto','Approved')|list|length }} Approved</span>
+            <span class="badge-rejected">❌ {{ predictions|selectattr('result','equalto','Rejected')|list|length }} Rejected</span>
+        </div>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+            <div style="font-size:3rem;margin-bottom:1rem;">📊</div>
+            <h6>No predictions made yet.</h6>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

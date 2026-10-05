@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="fade-in d-flex justify-content-center align-items-center" style="min-height:70vh;">
+    <div class="card border-0 shadow-sm p-4" style="width:100%;max-width:420px;border-radius:16px;">
+        <div class="text-center mb-4">
+            <div style="background:var(--warning-light, #FEF3C7);width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+                <i class="fas fa-shield-alt fa-2x" style="color:var(--warning, #F59E0B);"></i>
+            </div>
+            <h4 class="fw-bold mb-1">Admin Login</h4>
+            <p class="text-muted small mb-0">Enter your credentials to access the admin panel</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} py-2 small" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('admin_login') }}">
+            <div class="mb-3">
+                <label class="form-label fw-600 small">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background:var(--surface2);border-color:var(--border);">
+                        <i class="fas fa-user" style="color:var(--text-muted);"></i>
+                    </span>
+                    <input type="text" name="username" class="form-control" placeholder="Enter admin username" required
+                           style="border-color:var(--border);background:var(--surface);">
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label fw-600 small">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text" style="background:var(--surface2);border-color:var(--border);">
+                        <i class="fas fa-lock" style="color:var(--text-muted);"></i>
+                    </span>
+                    <input type="password" name="password" class="form-control" placeholder="Enter admin password" required
+                           style="border-color:var(--border);background:var(--surface);">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-warning-custom w-100 py-2 fw-bold">
+                <i class="fas fa-sign-in-alt me-2"></i>Login to Admin Panel
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{{ url_for('login') }}" class="text-muted small">
+                <i class="fas fa-arrow-left me-1"></i>Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

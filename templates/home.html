@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<style>
+.hero {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #EDE9FE 100%);
+    border-radius: 24px;
+    padding: 4rem 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background: rgba(37,99,235,0.06);
+    border-radius: 50%;
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 250px; height: 250px;
+    background: rgba(139,92,246,0.05);
+    border-radius: 50%;
+}
+.hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--primary-light); color: var(--primary);
+    padding: 0.4rem 1rem; border-radius: 20px; font-weight: 600;
+    font-size: 0.85rem; margin-bottom: 1.5rem;
+}
+.hero h1 {
+    font-size: 3rem; font-weight: 800;
+    line-height: 1.15; color: var(--text);
+    margin-bottom: 1.25rem;
+}
+.hero h1 span { color: var(--primary); }
+.hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 480px; }
+.hero-visual {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+}
+.hero-stat {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.hero-stat .val { font-size: 1.8rem; font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--primary); }
+.hero-stat .lbl { font-size: 0.82rem; color: var(--text-muted); }
+
+.feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    height: 100%;
+    transition: all 0.3s;
+    box-shadow: var(--shadow);
+}
+.feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.feature-icon {
+    width: 60px; height: 60px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; margin-bottom: 1.25rem;
+}
+.step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--primary); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-family: 'Plus Jakarta Sans', sans-serif;
+    margin-bottom: 1rem; font-size: 1rem;
+}
+.cta-section {
+    background: linear-gradient(135deg, var(--primary) 0%, #3B82F6 100%);
+    border-radius: 24px; padding: 3rem 2rem; text-align: center; color: white;
+    margin-top: 3rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="hero fade-in">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="hero-badge"><i class="fas fa-robot"></i> AI-Powered System</div>
+            <h1>Smart <span>Loan Approval</span> Prediction</h1>
+            <p class="mb-4">Get instant loan approval predictions using cutting-edge Machine Learning. Fast, accurate, and data-driven decision making for smarter lending.</p>
+            <div class="d-flex gap-3 flex-wrap">
+                <a href="{{ url_for('signup') }}" class="btn btn-primary-custom btn-lg"><i class="fas fa-user-plus me-2"></i>Get Started</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-custom btn-lg"><i class="fas fa-sign-in-alt me-2"></i>Login</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="hero-visual">
+                <div class="text-center mb-3">
+                    <div style="font-size:3rem; margin-bottom:0.5rem;">🏦</div>
+                    <h5 class="fw-700 mb-0" style="color:var(--primary);">Loan Approval Prediction</h5>
+                    <p style="color:var(--text-muted);font-size:0.85rem;" class="mb-3">Powered by Random Forest Algorithm</p>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="val">80%</div>
+                            <div class="lbl">Model Accuracy</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="val">598</div>
+                            <div class="lbl">Training Records</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="val" style="color:var(--accent);">✓ Fast</div>
+                            <div class="lbl">Instant Results</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="hero-stat">
+                            <div class="val" style="color:var(--warning);">🔒</div>
+                            <div class="lbl">Secure & Private</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background:var(--accent-light);border-radius:12px;padding:1rem;display:flex;align-items:center;gap:0.75rem;margin-top:0.5rem;">
+                    <div style="font-size:1.5rem;">✅</div>
+                    <div>
+                        <div style="font-weight:700;color:#065F46;">Loan Approved</div>
+                        <div style="font-size:0.8rem;color:var(--text-muted);">High chance of approval · Low Risk</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features -->
+<div class="mb-4">
+    <h2 class="fw-bold text-center mb-1">Why Choose Our System?</h2>
+    <p class="text-center text-muted mb-4">Built with modern ML techniques for reliable predictions</p>
+</div>
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#DBEAFE;"><i class="fas fa-brain" style="color:var(--primary);"></i></div>
+            <h5 class="fw-bold">AI-Powered Analysis</h5>
+            <p class="text-muted mb-0">Random Forest algorithm analyzes 11 financial features to predict loan approval with 80% accuracy.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#D1FAE5;"><i class="fas fa-clock" style="color:var(--accent);"></i></div>
+            <h5 class="fw-bold">Instant Results</h5>
+            <p class="text-muted mb-0">Get your loan approval prediction in seconds. No waiting, no manual review delays.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="feature-card">
+            <div class="feature-icon" style="background:#FEF3C7;"><i class="fas fa-history" style="color:var(--warning);"></i></div>
+            <h5 class="fw-bold">Full History</h5>
+            <p class="text-muted mb-0">Track all your prediction history. View past applications and results in one place.</p>
+        </div>
+    </div>
+</div>
+
+<!-- How it works -->
+<div style="background:var(--surface);border-radius:24px;padding:2.5rem;margin-bottom:3rem;border:1px solid var(--border);box-shadow:var(--shadow);">
+    <h2 class="fw-bold text-center mb-1">How It Works</h2>
+    <p class="text-center text-muted mb-4">Simple 4-step process to predict your loan approval</p>
+    <div class="row g-4">
+        {% for step in [
+            ('Create Account', 'Sign up with your name and email to access the system.', 'fa-user-plus'),
+            ('Enter Details', 'Fill in your financial information: income, assets, CIBIL score.', 'fa-edit'),
+            ('AI Prediction', 'Our ML model analyzes your data against historical patterns.', 'fa-robot'),
+            ('Get Result', 'Instantly see if your loan is approved or rejected with details.', 'fa-check-circle')
+        ] %}
+        <div class="col-md-3 text-center">
+            <div class="step-num mx-auto">{{ loop.index }}</div>
+            <div style="font-size:1.8rem;margin-bottom:0.75rem;"><i class="fas {{ step[2] }}" style="color:var(--primary);"></i></div>
+            <h6 class="fw-bold">{{ step[0] }}</h6>
+            <p class="text-muted small mb-0">{{ step[1] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+    <h2 class="fw-bold mb-2" style="color:white;">Ready to Check Your Loan Eligibility?</h2>
+    <p class="mb-4" style="color:rgba(255,255,255,0.85);">Join thousands using our AI system for smarter loan decisions.</p>
+    <a href="{{ url_for('signup') }}" class="btn btn-lg" style="background:white;color:var(--primary);font-weight:700;border-radius:12px;padding:0.85rem 2rem;">
+        <i class="fas fa-rocket me-2"></i>Start Free Now
+    </a>
+</div>
+{% endblock %}

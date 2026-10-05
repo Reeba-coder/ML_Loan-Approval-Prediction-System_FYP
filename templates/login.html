@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block extra_css %}
+<style>
+.auth-wrapper { min-height: 80vh; display: flex; align-items: center; }
+.auth-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 24px; box-shadow: var(--shadow-lg);
+    overflow: hidden; max-width: 900px; margin: 0 auto; width: 100%;
+}
+.auth-left {
+    background: linear-gradient(160deg, #EFF6FF 0%, #DBEAFE 100%);
+    padding: 3rem; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    border-right: 1px solid var(--border);
+}
+.auth-right { padding: 3rem; }
+.auth-illustration {
+    font-size: 6rem; margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.input-icon-wrapper { position: relative; }
+.input-icon-wrapper .form-control { padding-left: 2.75rem; }
+.input-icon-wrapper .icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.9rem; }
+.divider { text-align:center; position:relative; margin:1.25rem 0; }
+.divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:var(--border); }
+.divider span { background:white; padding:0 1rem; color:var(--text-muted); font-size:0.85rem; position:relative; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper fade-in">
+    <div class="auth-card">
+        <div class="row g-0">
+            <div class="col-lg-5 auth-left">
+                <div class="auth-illustration">🔐</div>
+                <h4 class="fw-bold mb-2" style="color:var(--primary);">Welcome Back!</h4>
+                <p class="text-muted mb-0">Log in to access your personalized loan approval predictions and history.</p>
+                <div class="mt-4" style="background:white;border-radius:16px;padding:1.5rem;border:1px solid var(--border);width:100%;">
+                    <div class="text-center mb-2"><i class="fas fa-shield-alt fa-2x" style="color:var(--primary);"></i></div>
+                    <p class="text-center text-muted small mb-0">Your data is encrypted and stored securely. We never share your information.</p>
+                </div>
+            </div>
+            <div class="col-lg-7 auth-right">
+                <h3 class="fw-bold mb-1"><i class="fas fa-sign-in-alt me-2" style="color:var(--primary);"></i>Login</h3>
+                <p class="text-muted mb-4">Enter your credentials to continue.</p>
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-envelope icon"></i>
+                            <input type="email" name="email" class="form-control" placeholder="you@email.com" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-lock icon"></i>
+                            <input type="password" name="password" class="form-control" placeholder="Your password" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom w-100 btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                </form>
+                <div class="divider"><span>new here?</span></div>
+                <a href="{{ url_for('signup') }}" class="btn btn-outline-custom w-100">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
